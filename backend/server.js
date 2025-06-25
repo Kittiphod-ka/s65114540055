@@ -39,8 +39,8 @@ app.use("/api/drivers", driverRoutes);
 app.use("/api/slidecars", slideCarRoutes);
 console.log("✅ SlideCar Routes Loaded");  // ✅ เพิ่ม Route สำหรับรถสไลด์
 
-const adminRoutes = require("./routes/admin"); // ✅ ต้องมี
-app.use("/api/admin", adminRoutes);
+// const adminRoutes = require("./routes/admin"); // ✅ ต้องมี
+// app.use("/api/admin", adminRoutes);
 
 
 // Root route

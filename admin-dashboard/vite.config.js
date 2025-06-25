@@ -7,4 +7,8 @@ export default defineConfig({
   css: {
     postcss: './postcss.config.js', // เพิ่มบรรทัดนี้
   },
+  server: {
+    host: true,
+    port: 3000  
+  }
 })
