@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "frontend",
+    "slug": "frontend",
+    "version": "1.0.0",
+    "newArchEnabled": true,
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "scheme": "myapp",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
+      "package": "com.anonymous.frontend",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "myapp",
+              "host": "10.255.67.10"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f1d3d92e-a43c-4665-9d29-0c22fa6a9abc"
+      }
+    }
+  }
+}

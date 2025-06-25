@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ชำระเงินสำเร็จ</title>
+</head>
+<body>
+  <h2>✅ ชำระเงินสำเร็จ</h2>
+  <p>ขอบคุณที่ใช้บริการ!</p>
+  <button onclick="redirectToApp()">กลับไปที่แอพ</button>
+
+  <script>
+    function redirectToApp() {
+      window.location.href = "myapp://payment-success?bookingId=${bookingId}";
+    }
+  </script>
+</body>
+</html>
