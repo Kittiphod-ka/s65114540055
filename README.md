@@ -88,9 +88,12 @@ docker-compose up -d --build
 ---
 ### 🌐 6. คำสั่งสำหรับ Restore ข้อมูลใน Database
 ```
-docker cp ../mongo-backup slicercar-mongo:/data/restore
+docker exec -it slicercar-mongo bash
+```
+จากนั้นใช้คำสั่ง :
 docker exec slicercar-mongo mongorestore /data/restore
 ```
+Ctrl+D เพื่อออก
 ---
 ### 🌐 7. เปิดแอดมิน Dashboard ที่เบราว์เซอร์
 
