@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"licensePlate":{"$numberInt":"1"}},"name":"licensePlate_1","background":true,"unique":true}],"uuid":"5141c24ba73d4af9ba614a3810cd1776","collectionName":"slidecars","type":"collection"}
