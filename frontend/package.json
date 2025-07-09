@@ -21,6 +21,7 @@
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "expo": "51.0.0",
+    "expo-image-picker": "~15.1.0",
     "expo-linking": "~6.3.1",
     "expo-location": "~17.0.1",
     "expo-status-bar": "~1.12.1",
@@ -35,8 +36,7 @@
     "react-native-screens": "3.31.1",
     "react-native-web": "~0.19.10",
     "react-native-webview": "13.8.6",
-    "stripe": "^17.6.0",
-    "expo-image-picker": "~15.1.0"
+    "stripe": "^17.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

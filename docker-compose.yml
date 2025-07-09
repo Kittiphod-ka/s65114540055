@@ -30,5 +30,20 @@ services:
     environment:
       - REACT_APP_API_URL=http://backend:5000
 
+  frontend:
+    build:
+      context: ./frontend
+    container_name: slicercar-frontend
+    ports:
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    volumes:
+      - ./frontend:/app
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
 volumes:
   mongo-data:

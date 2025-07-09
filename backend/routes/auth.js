@@ -11,7 +11,7 @@ const router = express.Router();
 
 // ✅ ฟังก์ชันเช็ค Role ของ User, Driver หรือ Admin
 const findUserOrDriverOrAdmin = async (username) => {
-  let admin = await Admin.findOne({ username });
+  let admin = await User.findOne({ username });
   if (admin) return { user: admin, role: "admin" };
 
   let user = await User.findOne({ username });
@@ -23,57 +23,51 @@ const findUserOrDriverOrAdmin = async (username) => {
   return null;
 };
 
-// ✅ สมัคร Admin ใหม่
-router.post("/admin/signup", async (req, res) => {
-  const { username, email, password } = req.body;
+// // ✅ สมัคร Admin ใหม่
+// router.post("/admin/signup", async (req, res) => {
+//   const { username, email, password } = req.body;
 
-  try {
-    let admin = await Admin.findOne({ email });
-    if (admin) {
-      return res.status(400).json({ message: "อีเมลนี้ถูกใช้แล้ว" });
-    }
+//   try {
+//     let admin = await Admin.findOne({ email });
+//     if (admin) {
+//       return res.status(400).json({ message: "อีเมลนี้ถูกใช้แล้ว" });
+//     }
 
-    const newAdmin = new Admin({ username, email, password });
-    await newAdmin.save();
+//     const newAdmin = new Admin({ username, email, password });
+//     await newAdmin.save();
 
-    res.status(201).json({ message: "สร้างแอดมินสำเร็จ" });
-  } catch (error) {
-    console.error("❌ Error creating admin:", error);
-    res.status(500).json({ message: "เกิดข้อผิดพลาด" });
-  }
-});
+//     res.status(201).json({ message: "สร้างแอดมินสำเร็จ" });
+//   } catch (error) {
+//     console.error("❌ Error creating admin:", error);
+//     res.status(500).json({ message: "เกิดข้อผิดพลาด" });
+//   }
+// });
 
 // ✅ ล็อกอิน (แยก Role)
-router.post("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
-    const result = await findUserOrDriverOrAdmin(username);
+    const user = await User.findOne({ username });
 
-    if (!result) {
-      return res.status(404).json({ message: "ไม่พบผู้ใช้" });
-    }
+    if (!user) return res.status(404).json({ message: 'ไม่พบผู้ใช้' });
 
-    const { user, role } = result;
     const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(401).json({ message: 'รหัสผ่านไม่ถูกต้อง' });
 
-    if (!isMatch) {
-      return res.status(401).json({ message: "รหัสผ่านไม่ถูกต้อง" });
-    }
-
-    const token = jwt.sign({ id: user._id, role }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
     res.json({
-      message: "ล็อกอินสำเร็จ",
+      message: 'ล็อกอินสำเร็จ',
       token,
       user: {
         id: user._id,
         username: user.username,
-        role,
+        role: user.role,
       },
     });
   } catch (error) {
-    console.error("❌ Error logging in:", error);
-    res.status(500).json({ message: "เกิดข้อผิดพลาด" });
+    console.error('❌ Error logging in:', error);
+    res.status(500).json({ message: 'เกิดข้อผิดพลาด' });
   }
 });
 

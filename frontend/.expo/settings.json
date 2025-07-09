@@ -3,9 +3,7 @@
   "lanType": "ip",
   "dev": true,
   "minify": false,
-  "urlRandomness": null,
+  "urlRandomness": "uT_F95U",
   "https": false,
-  "devServer": "10.255.67.10",
-  "devClient": true,
-  "scheme": "com.anonymous.frontend"
+  "devServer": "10.255.67.10"
 }
