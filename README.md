@@ -90,11 +90,13 @@ docker-compose up -d --build
 ```
 docker exec -it slicercar-mongo bash
 ```
+```
 จากนั้นใช้คำสั่ง :
 docker exec slicercar-mongo mongorestore /data/restore
 ```
 Ctrl+D เพื่อออก
 ---
+
 ### 🌐 7. เปิดแอดมิน Dashboard ที่เบราว์เซอร์
 
 ```
