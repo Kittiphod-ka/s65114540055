@@ -21,7 +21,7 @@ const Booking = () => {
         return;
       }
 
-      const response = await axios.get("http://26.120.17.211:5000/api/bookings", {
+      const response = await axios.get("http://localhost:5000/api/bookings", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -37,7 +37,7 @@ const Booking = () => {
   const handleDelete = async (id) => {
     if (window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบการจองนี้?")) {
       try {
-        await axios.delete(`http://26.120.17.211:5000/api/bookings/${id}`);
+        await axios.delete(`http://localhost:5000/api/bookings/${id}`);
         fetchBookings(); // โหลดข้อมูลใหม่หลังจากลบ
       } catch (error) {
         console.error("❌ Error deleting booking:", error);
@@ -57,7 +57,7 @@ const Booking = () => {
       console.log(`📡 กำลังอัปเดตสถานะ Booking ID: ${id} -> ${newStatus}`);
   
       const response = await axios.put(
-        `http://26.120.17.211:5000/api/bookings/update-status/${id}`,
+        `http://localhost:5000/api/bookings/update-status/${id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -44,7 +44,7 @@ const confirmPayment = async (_id) => {
         const token = await AsyncStorage.getItem("token");
 
         await axios.post(
-            "http://26.120.17.211:5000/api/payment/confirm-payment",
+            "http://10.0.2.2:5000/api/payment/confirm-payment",
             { _id }, // ✅ ส่ง `_id` ไปอัปเดตฐานข้อมูล
             { headers: { Authorization: `Bearer ${token}` } }
         );

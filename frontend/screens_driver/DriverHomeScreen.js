@@ -27,7 +27,7 @@ export default function DriverHomeScreen({ navigation }) {
         setDriverId(storedDriverId);
 
         // ✅ ดึงสถานะ on/off จาก API
-        const response = await axios.get(`http://26.120.17.211:5000/api/drivers/status/${storedDriverId}`);
+        const response = await axios.get(`http://10.0.2.2:5000/api/drivers/status/${storedDriverId}`);
         if (response.data && response.data.status) {
           setStatus(response.data.status);
           await AsyncStorage.setItem("driver_status", response.data.status);
@@ -54,7 +54,7 @@ export default function DriverHomeScreen({ navigation }) {
 
       console.log(`📡 กำลังอัปเดตสถานะเป็น ${newStatus}...`);
 
-      const response = await axios.post("http://26.120.17.211:5000/api/drivers/update-status", {  
+      const response = await axios.post("http://10.0.2.2:5000/api/drivers/update-status", {  
         driver_id: storedDriverId,  
         status: newStatus,
       });

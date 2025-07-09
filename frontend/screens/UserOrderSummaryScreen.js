@@ -14,7 +14,7 @@ export default function UserOrderSummaryScreen({ route }) {
 
   const fetchImages = async () => {
     try {
-      const response = await axios.get(`http://26.120.17.211:5000/api/booking-images/${bookingData._id}`);
+      const response = await axios.get(`http://10.0.2.2:5000/api/booking-images/${bookingData._id}`);
       console.log("📸 รูปที่ดึงมา:", response.data); 
       setImages(response.data);
     } catch (error) {
@@ -44,8 +44,8 @@ export default function UserOrderSummaryScreen({ route }) {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imageContainer}>
         {images.length > 0 ? (
           images.map((img, index) => (
-            <TouchableOpacity key={index} onPress={() => setSelectedImage(`http://26.120.17.211:5000${img.imageUrl}`)}>
-              <Image source={{ uri: `http://26.120.17.211:5000${img.imageUrl}` }} style={styles.image} />
+            <TouchableOpacity key={index} onPress={() => setSelectedImage(`http://10.0.2.2:5000${img.imageUrl}`)}>
+              <Image source={{ uri: `http://10.0.2.2:5000${img.imageUrl}` }} style={styles.image} />
             </TouchableOpacity>
           ))
         ) : (

@@ -65,7 +65,7 @@ router.put("/update-status/:id", async (req, res) => {
   });
 
 // ✅ กำหนดคนขับให้รถสไลด์
-router.put("/assign-driver/:id", async (req, res) => {
+router.put("/driver/:id", async (req, res) => {
   try {
     const { driverId } = req.body;
     const slideCar = await SlideCar.findById(req.params.id);

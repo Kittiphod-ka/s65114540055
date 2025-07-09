@@ -17,7 +17,7 @@ const EditDriver = () => {
     try {
       console.log("🔍 กำลังดึงข้อมูลคนขับ:", id);
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://26.120.17.211:5000/api/drivers/${id}`, {
+      const response = await axios.get(`http://localhost:5000/api/drivers/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("✅ ได้รับข้อมูล:", response.data);
@@ -34,7 +34,7 @@ const EditDriver = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://26.120.17.211:5000/api/drivers/${id}`, driver, {
+      await axios.put(`http://localhost:5000/api/drivers/${id}`, driver, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("✅ อัปเดตข้อมูลสำเร็จ!");

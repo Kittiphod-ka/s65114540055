@@ -87,7 +87,7 @@ const BookingScreen = ({ navigation, route }) => {
     try {
       console.log("📢 กำลังสร้างลิงก์ชำระเงิน...");
   
-      const response = await axios.post("http://26.120.17.211:5000/api/payment/create-payment-link", {
+      const response = await axios.post("http://10.0.2.2:5000/api/payment/create-payment-link", {
         amount: form.total_price,
         bookingData: form,
       });

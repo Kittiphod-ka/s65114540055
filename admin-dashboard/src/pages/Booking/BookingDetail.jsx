@@ -21,7 +21,7 @@ const BookingDetail = () => {
         return;
       }
   
-      const response = await axios.get(`http://26.120.17.211:5000/api/bookings/${id}`, {
+      const response = await axios.get(`http://localhost:5000/api/bookings/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
@@ -36,7 +36,7 @@ const BookingDetail = () => {
 
   const fetchImages = async (bookingId) => {
     try {
-      const response = await axios.get(`http://26.120.17.211:5000/api/booking-images/${bookingId}`);
+      const response = await axios.get(`http://localhost:5000/api/booking-images/${bookingId}`);
       setImages(response.data);
     } catch (error) {
       console.error("❌ Error fetching images:", error);
@@ -70,7 +70,7 @@ const BookingDetail = () => {
                 images.map((img, index) => (
                   <img
                     key={index}
-                    src={`http://26.120.17.211:5000${img.imageUrl}`}
+                    src={`http://localhost:5000${img.imageUrl}`}
                     alt={`booking-${index}`}
                     className="w-40 h-40 object-cover m-2 rounded shadow"
                   />
