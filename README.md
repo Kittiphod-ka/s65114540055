@@ -65,7 +65,7 @@ cd my-project
 ### 🔄 4. Clone โปรเจกต์จาก GitHub
 
 ```bash
-gh repo clone Kittiphod-ka/65114540055-Selected.git
+gh repo clone Kittiphod-ka/65114540055-Selected
 
 ```
 
