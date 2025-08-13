@@ -9,7 +9,7 @@ until mongosh --eval "db.adminCommand('ping')" >/dev/null 2>&1; do
   sleep 1
 done
 
-# restore ถ้ามีไฟล์
+# restore database car
 if [ -d "$DUMP_DIR/car" ] && [ "$(ls -A "$DUMP_DIR/car")" ]; then
   echo ">>> Restoring MongoDB database 'car'..."
   mongorestore --drop --db car "$DUMP_DIR/car" || true
