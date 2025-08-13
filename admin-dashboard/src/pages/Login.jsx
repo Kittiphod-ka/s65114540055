@@ -35,10 +35,12 @@ const Login = ({ setIsAuthenticated }) => {
     }
   };
 
-  return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <form onSubmit={handleLogin} className="bg-white p-6 rounded-lg shadow-md w-80">
-        <h2 className="text-xl font-bold mb-4">🔑 เข้าสู่ระบบ สำหรับแอดมิน</h2>
+ return (
+  <div className="flex items-center justify-center h-screen bg-gray-100">
+    <div className="bg-white p-6 rounded-lg shadow-md w-80">
+      <h2 className="text-xl font-bold mb-4">🔑 เข้าสู่ระบบ สำหรับแอดมิน</h2>
+
+      <form onSubmit={handleLogin}>
         <input
           type="text"
           placeholder="Username"
@@ -59,8 +61,14 @@ const Login = ({ setIsAuthenticated }) => {
           ล็อกอิน
         </button>
       </form>
+
+      <div className="mt-4 p-3 border-2 border-dashed relative z-50 not-sr-only">
+        <h1 className="text-lg font-bold">Username: test21</h1>
+        <h1 className="text-lg font-bold">Password: nnn112233</h1>
+      </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default Login;

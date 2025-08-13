@@ -9,11 +9,19 @@ until mongosh --eval "db.adminCommand('ping')" >/dev/null 2>&1; do
   sleep 1
 done
 
-# restore database car
+# restore ถ้ามีไฟล์
 if [ -d "$DUMP_DIR/car" ] && [ "$(ls -A "$DUMP_DIR/car")" ]; then
   echo ">>> Restoring MongoDB database 'car'..."
   mongorestore --drop --db car "$DUMP_DIR/car" || true
   echo ">>> Restore complete."
 else
   echo ">>> No dump found for 'car', skipping restore."
+fi
+# ตรวจสอบว่า database 'car' มีอยู่หรือไม่
+if mongosh --eval "db.getMongo().getDBNames().indexOf('car') >= 0" >/dev/null 2>&1; then
+  echo ">>> Database 'car' exists."
+else
+  echo ">>> Database 'car' does not exist, creating an empty database."
+  mongosh --eval "use car; db.createCollection('dummy');" >/dev/null 2>&1
+  echo ">>> Created empty database 'car'."
 fi
