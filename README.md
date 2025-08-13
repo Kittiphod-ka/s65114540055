@@ -71,34 +71,16 @@ gh repo clone Kittiphod-ka/65114540055-Selected
 
 ---
 
-### 🐳 5. สั่งรัน Docker Compose เพื่อรัน frontend, backend, mongo และ admin dashboard
+### 🐳 5. สั่งรัน Docker Compose เพื่อรัน frontend, backend, mongo และ admin dashboard และเปิด Android Studio
 ```bash
 cd 65114540055-Selected
 ```
 ```bash
-docker-compose up -d --build
+docker compose up -d; if ($?) { cd frontend; if (!(Test-Path node_modules)) { npm install }; npx expo start -c --android --port 19003 }
 ```
-จากนั้นรันคำสั่งต่อไปนี้เพื่อรัน Android Studio เนื่องจาก Docker ไม่สามารถ Android Studio เปิดเองได้ :
-```bash
- cd frontend
-```
-```bash
- npx expo start --tunnel --android  
-```
----
-### 🌐 6. คำสั่งสำหรับ Restore ข้อมูลใน Database
-ใช้คำสั่ง :
-```
-docker cp ./mongo-backup slicercar-mongo:/data/restore
-```
-จากนั้นใช้คำสั่ง :
-```
-docker exec -it slicercar-mongo mongorestore /data/restore
-```
-Ctrl+D เพื่อออก
 ---
 
-### 🌐 7. เปิดแอดมิน Dashboard ที่เบราว์เซอร์
+### 🌐 6. เปิดแอดมิน Dashboard ที่เบราว์เซอร์
 
 ```
 http://localhost:3000
