@@ -2,12 +2,15 @@ version: "3.8"
 
 services:
   mongo:
-    image: mongo
+    image: mongo:8
     container_name: slicercar-mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+      # mount backup database ชื่อ car เข้า dump
+      - ./mongo-backup:/docker-entrypoint-initdb.d/dump:ro
+      - ./docker/mongo-init.sh:/docker-entrypoint-initdb.d/01-restore.sh:ro
 
   backend:
     build: ./backend
