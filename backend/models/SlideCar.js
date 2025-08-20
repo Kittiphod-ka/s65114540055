@@ -1,11 +1,11 @@
-const mongoose = require("mongoose");
-
-const SlideCarSchema = new mongoose.Schema({
-  brand: { type: String, required: true },
-  model: { type: String, required: true },
-  licensePlate: { type: String, required: true, unique: true },
-  driver: { type: mongoose.Schema.Types.ObjectId, ref: "Driver", default: null },
-  status: { type: String, enum: ["พร้อมใช้งาน", "ไม่พร้อมใช้งาน"], default: "พร้อมใช้งาน" }
-});
-
-module.exports = mongoose.model("SlideCar", SlideCarSchema);
+module.exports = (sequelize, DataTypes) => {
+  const SlideCar = sequelize.define('SlideCar', {
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    brand: { type: DataTypes.STRING, allowNull: true },
+    model: { type: DataTypes.STRING, allowNull: true },
+    licensePlate: { type: DataTypes.STRING, allowNull: true, unique: true },
+    status: { type: DataTypes.ENUM('พร้อมใช้งาน', 'ไม่พร้อมใช้งาน'), defaultValue: 'พร้อมใช้งาน' },
+    driverId: { type: DataTypes.INTEGER, allowNull: true },
+  }, { tableName: 'slide_cars', timestamps: true });
+  return SlideCar;
+};

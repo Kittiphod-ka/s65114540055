@@ -42,7 +42,7 @@ const SlideCar = () => {
   
       if (response.status === 200) {
         setSlideCars(prevCars =>
-          prevCars.map(car => (car._id === id ? { ...car, status: newStatus } : car))
+          prevCars.map(car => (car.id === id ? { ...car, status: newStatus } : car))
         );
       } else {
         console.error("❌ Error updating status: Unexpected response", response);
@@ -81,7 +81,7 @@ const SlideCar = () => {
               <tbody>
                 {slideCars.length > 0 ? (
                   slideCars.map((car, index) => (
-                    <tr key={car._id} className="text-center">
+                    <tr key={car.id} className="text-center">
                       <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
                       <td className="border border-gray-300 px-4 py-2">{car.brand}</td>
                       <td className="border border-gray-300 px-4 py-2">{car.model}</td>
@@ -92,7 +92,7 @@ const SlideCar = () => {
                       <td className="border border-gray-300 px-4 py-2">
                         <select
                             value={car.status}
-                            onChange={(e) => handleStatusChange(car._id, e.target.value)}
+                            onChange={(e) => handleStatusChange(car.id, e.target.value)}
                             className={`px-2 py-1 rounded ${
                             car.status === "พร้อมใช้งาน" ? "bg-green-500 text-white" : "bg-red-500 text-white"
                             }`}
@@ -103,13 +103,13 @@ const SlideCar = () => {
                         </td>
                       <td className="border border-gray-300 px-4 py-2 flex gap-2 justify-center">
                         <Link
-                          to={`/slidecars/edit/${car._id}`}
+                          to={`/slidecars/edit/${car.id}`}
                           className="bg-yellow-500 text-white px-3 py-1 rounded-md"
                         >
                           แก้ไข
                         </Link>
                         <button
-                          onClick={() => handleDelete(car._id)}
+                          onClick={() => handleDelete(car.id)}
                           className="bg-red-500 text-white px-3 py-1 rounded-md"
                         >
                           ลบ

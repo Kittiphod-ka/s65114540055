@@ -24,8 +24,8 @@ const AddDriver = () => {
       alert("✅ เพิ่มคนขับสำเร็จ!");
       navigate("/drivers");
     } catch (error) {
-      console.error("❌ Error adding driver:", error);
-      alert("❌ เพิ่มคนขับไม่สำเร็จ!");
+      const msg = error.response?.data?.message || "❌ เพิ่มคนขับไม่สำเร็จ!";
+      alert(msg);
     }
   };
 

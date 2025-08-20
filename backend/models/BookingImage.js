@@ -1,9 +1,10 @@
-const mongoose = require("mongoose");
+module.exports = (sequelize, DataTypes) => {
+  const BookingImage = sequelize.define('BookingImage', {
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    bookingId: { type: DataTypes.INTEGER, allowNull: true },
+    imageUrl: { type: DataTypes.STRING, allowNull: true },
+    uploadedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+  }, { tableName: 'booking_images', timestamps: true });
 
-const bookingImageSchema = new mongoose.Schema({
-  bookingId: { type: mongoose.Schema.Types.ObjectId, ref: "Booking", required: true },
-  imageUrl: { type: String, required: true },
-  uploadedAt: { type: Date, default: Date.now }
-});
-
-module.exports = mongoose.model("BookingImage", bookingImageSchema);
+  return BookingImage;
+};

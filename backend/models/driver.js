@@ -1,13 +1,12 @@
-const mongoose = require("mongoose");
-
-
-const driverSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
-    password: { type: String, required: true },
-    phone: { type: String, required: true },
-    status: { type: String, enum: ["on", "off"], default: "off" }, 
-    role: { type: String, default: "driver" },
-});
-
-module.exports = mongoose.model("Driver", driverSchema);
+module.exports = (sequelize, DataTypes) => {
+  const Driver = sequelize.define('Driver', {
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    username: { type: DataTypes.STRING, allowNull: true, unique: true },
+    name: { type: DataTypes.STRING, allowNull: true },
+    password: { type: DataTypes.STRING, allowNull: true },
+    phone: { type: DataTypes.STRING, allowNull: true },
+    status: { type: DataTypes.ENUM('on', 'off'), defaultValue: 'off' },
+    role: { type: DataTypes.STRING, defaultValue: 'driver' },
+  }, { tableName: 'drivers', timestamps: true });
+  return Driver;
+};

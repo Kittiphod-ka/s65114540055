@@ -1,15 +1,18 @@
 version: "3.8"
 
 services:
-  mongo:
-    image: mongo:8
-    container_name: slicercar-mongo
+  postgres:
+    image: postgres:17
+    container_name: slicercar-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: car
     ports:
-      - "27017:27017"
+      - "5432:5432"
     volumes:
-      - mongo-data:/data/db
-      - ./mongo-backup:/docker-entrypoint-initdb.d/dump:ro
-      - ./docker/mongo-init.sh:/docker-entrypoint-initdb.d/01-restore.sh:ro
+      - postgres-data:/var/lib/postgresql/data
 
   backend:
     build: ./backend
@@ -17,10 +20,25 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - mongo
+      - postgres
     environment:
-      - MONGODB_URI=mongodb://mongo:27017/car
+      - DATABASE_URL=postgres://postgres:123456@postgres:5432/car
       - NODE_ENV=development
+
+  importer:
+    build:
+      context: .
+      dockerfile: docker/importer.Dockerfile
+    container_name: slicercar-importer
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgres://postgres:123456@postgres:5432/car
+    volumes:
+      - ./mongo-backup:/app/mongo-backup:ro
+      - ./backend:/app/backend:ro
+      - ./docker/mongo_to_postgres_import.js:/app/mongo_to_postgres_import.js:ro
+    command: ["node", "mongo_to_postgres_import.js", "--dir", "./mongo-backup", "--sync"]
 
   admin:
     build: ./admin-dashboard
@@ -48,4 +66,4 @@ services:
       - backend
 
 volumes:
-  mongo-data:
+  postgres-data:

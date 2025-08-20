@@ -66,7 +66,7 @@ const Booking = () => {
         console.log("✅ อัปเดตสถานะสำเร็จ!", response.data);
         setBookings((prevBookings) =>
           prevBookings.map((booking) =>
-            booking._id === id ? { ...booking, status: newStatus } : booking
+            booking.id === id ? { ...booking, status: newStatus } : booking
           )
         ); // ✅ อัปเดตสถานะใน UI ทันที
       } else {
@@ -106,7 +106,7 @@ const Booking = () => {
               <tbody>
                 {bookings.length > 0 ? (
                   bookings.map((booking, index) => (
-                    <tr key={booking._id} className="text-center">
+                    <tr key={booking.id} className="text-center">
                       <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
                       <td className="border border-gray-300 px-4 py-2">{booking.name}</td>
                       <td className="border border-gray-300 px-4 py-2">{booking.user_phone}</td>
@@ -116,7 +116,7 @@ const Booking = () => {
                       <td className="border border-gray-300 px-4 py-2">
                             <select
                               value={booking.status}
-                              onChange={(e) => handleStatusChange(booking._id, e.target.value)}
+                              onChange={(e) => handleStatusChange(booking.id, e.target.value)}
                               className={`px-2 py-1 rounded 
                                 ${
                                   booking.status === "รอดำเนินการ"
@@ -139,14 +139,14 @@ const Booking = () => {
                       <td className="border border-gray-300 px-4 py-2 flex justify-center space-x-2">
                         {/* ✅ ปุ่มดูข้อมูล */}
                         <button
-                          onClick={() => navigate(`/booking/${booking._id}`)}
+                          onClick={() => navigate(`/booking/${booking.id}`)}
                           className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
                         >
                           🔍 ดูข้อมูล
                         </button>
                         {/* ✅ ปุ่มลบ */}
                         <button
-                          onClick={() => handleDelete(booking._id)}
+                          onClick={() => handleDelete(booking.id)}
                           className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                         >
                           ลบ

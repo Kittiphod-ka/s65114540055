@@ -58,7 +58,7 @@ const BookingDetail = () => {
             <p><strong>📍 จุดส่ง:</strong> {booking.dropoff_location.latitude}</p>
             <p><strong>👤 ผู้จอง:</strong> {booking.name}</p>
             <p><strong>📞 เบอร์โทร:</strong> {booking.user_phone}</p>
-            <p><strong>🚗 คนขับ:</strong> {booking.driver ? booking.driver_id : "ยังไม่มีคนขับ"}</p>
+            <p><strong>🚗 คนขับ:</strong> {booking.driver ? booking.driverid : "ยังไม่มีคนขับ"}</p>
             <p><strong>📌 สถานะ:</strong> {booking.status}</p>
             <p><strong>💰 ค่าบริการ:</strong> {booking.total_price} บาท</p>
             <p><strong>📅 วันที่:</strong> {new Date(booking.createdAt).toLocaleString()}</p>
