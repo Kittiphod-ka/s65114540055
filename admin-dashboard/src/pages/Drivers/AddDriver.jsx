@@ -16,18 +16,30 @@ const AddDriver = () => {
   const handleChange = (e) => {
     setDriver({ ...driver, [e.target.name]: e.target.value });
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post("http://localhost:5000/api/drivers", driver);
-      alert("✅ เพิ่มคนขับสำเร็จ!");
-      navigate("/drivers");
-    } catch (error) {
-      const msg = error.response?.data?.message || "❌ เพิ่มคนขับไม่สำเร็จ!";
-      alert(msg);
-    }
-  };
+console.log("🚩 AddDriver component rendered");
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  console.log("🚩 handleSubmit clicked");
+  try {
+    const token = localStorage.getItem("token");
+    console.log("🚩 Token ที่จะส่ง:", token);
+    await axios.post(
+      "http://localhost:5000/api/drivers",
+      driver,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    alert("✅ เพิ่มคนขับสำเร็จ!");
+    navigate("/drivers");
+  } catch (error) {
+    console.error("🚩 เพิ่มคนขับ error:", error.response?.data || error);
+    const msg = error.response?.data?.message || "❌ เพิ่มคนขับไม่สำเร็จ!";
+    alert(msg);
+  }
+};
 
   return (
     <div className="p-6">

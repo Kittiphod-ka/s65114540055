@@ -16,6 +16,7 @@ const EditDriver = () => {
   const fetchDriver = async () => {
     try {
       console.log("🔍 กำลังดึงข้อมูลคนขับ:", id);
+      console.log("EditDriver id param:", id);
       const token = localStorage.getItem("token");
       const response = await axios.get(`http://localhost:5000/api/drivers/${id}`, {
         headers: { Authorization: `Bearer ${token}` },

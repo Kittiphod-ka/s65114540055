@@ -1,101 +1,148 @@
 const express = require("express");
 const router = express.Router();
-const { Driver, SlideCar } = require("../models");
+const { Driver, Booking, SlideCar } = require("../models");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// ✅ ดึงคนขับทั้งหมด
-router.get("/", authMiddleware, async (_req, res) => {
+// ✅ ดึงคนขับทั้งหมด (ต้อง login)
+router.get("/", authMiddleware, async (req, res) => {
   try {
     const drivers = await Driver.findAll({ order: [["id", "ASC"]] });
     res.json(drivers);
   } catch (error) {
     console.error("❌ Error fetching drivers:", error);
-    res.status(500).json({ message: "❌ ไม่สามารถดึงข้อมูลคนขับได้" });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-// ✅ สร้างคนขับ
-router.post("/", authMiddleware, async (req, res) => {
+// 📌 ดึง "งานทั้งหมด" ที่รอคนขับรับ
+router.get("/driver/orders", async (req, res) => {
   try {
-    const d = await Driver.create(req.body);
-    res.status(201).json(d);
+    const orders = await Booking.findAll({ where: { status: "รอคนขับ" } });
+    res.json(orders);
   } catch (error) {
-    console.error("❌ Error creating driver:", error);
-    res.status(500).json({ message: "❌ ไม่สามารถสร้างคนขับได้" });
+    console.error("❌ Error fetching driver orders:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการดึงข้อมูล" });
   }
 });
 
-// ✅ อัปเดตคนขับ
-router.put("/:id", authMiddleware, async (req, res) => {
+// 📌 คนขับกดรับงาน
+router.post("/driver/accept-order", async (req, res) => {
+  const { order_id, driver_id } = req.body;
   try {
-    const d = await Driver.findByPk(req.params.id);
-    if (!d) return res.status(404).json({ message: "❌ ไม่พบคนขับ" });
-    await d.update(req.body);
-    res.json(d);
+    const order = await Booking.findByPk(order_id);
+    if (!order) return res.status(404).json({ message: "ไม่พบงานนี้" });
+
+    order.status = "กำลังดำเนินการ";
+    order.driver_id = driver_id;
+    await order.save();
+
+    res.json({ message: "รับงานสำเร็จ!", order });
   } catch (error) {
-    console.error("❌ Error updating driver:", error);
-    res.status(500).json({ message: "❌ ไม่สามารถอัปเดตได้" });
+    console.error("❌ Error updating order:", error);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการอัปเดตงาน" });
   }
 });
 
-// ✅ ลบคนขับ
-router.delete("/:id", authMiddleware, async (req, res) => {
+// ✅ ดึงสถานะของคนขับ
+router.get("/status/:driverId", async (req, res) => {
   try {
-    const d = await Driver.findByPk(req.params.id);
-    if (!d) return res.status(404).json({ message: "❌ ไม่พบคนขับ" });
-    await d.destroy();
-    res.json({ ok: true });
+    const driver = await Driver.findByPk(req.params.driverId);
+    if (!driver) return res.status(404).json({ message: "❌ ไม่พบข้อมูลคนขับ" });
+
+    res.json({ status: driver.status });
   } catch (error) {
-    console.error("❌ Error deleting driver:", error);
-    res.status(500).json({ message: "❌ ไม่สามารถลบได้" });
+    console.error("❌ Error fetching driver status:", error);
+    res.status(500).json({ message: "❌ ไม่สามารถดึงข้อมูลสถานะได้" });
   }
 });
 
-// ✅ อัปเดตสถานะของคนขับ (on/off)
-router.post("/update-status", authMiddleware, async (req, res) => {
+// ✅ อัปเดตสถานะของคนขับ
+router.post("/update-status", async (req, res) => {
   try {
     const { driver_id, status } = req.body;
-    if (!driver_id) return res.status(400).json({ message: "ต้องมี driver_id" });
-
-    const d = await Driver.findByPk(driver_id);
-    if (!d) return res.status(404).json({ message: "❌ ไม่พบคนขับ" });
-
-    await d.update({ status });
-    res.json(d);
+    const driver = await Driver.findByPk(driver_id);
+    if (!driver) {
+      return res.status(404).json({ message: "❌ ไม่พบข้อมูลคนขับ" });
+    }
+    driver.status = status;
+    await driver.save();
+    res.json({ message: "✅ อัปเดตสถานะสำเร็จ", status: driver.status });
   } catch (error) {
-    console.error("❌ Error updating status:", error);
+    console.error("❌ Error updating driver status:", error);
     res.status(500).json({ message: "❌ ไม่สามารถอัปเดตสถานะได้" });
   }
 });
 
-// ✅ จัดคนขับให้รถสไลด์ (driverId → slide car)
-router.post("/assign-car", authMiddleware, async (req, res) => {
+// ✅ ดึงรายชื่อคนขับทั้งหมด
+router.get("/all", async (req, res) => {
   try {
-    const { carId, driverId } = req.body;
-    if (!carId) return res.status(400).json({ message: "ต้องมี carId" });
-
-    const car = await SlideCar.findByPk(carId);
-    if (!car) return res.status(404).json({ message: "❌ ไม่พบรถสไลด์" });
-
-    await car.update({ driverId: driverId || null });
-    res.json(car);
+    const drivers = await Driver.findAll({ order: [["id", "ASC"]] });
+    res.json(drivers);
   } catch (error) {
-    console.error("❌ Error assigning driver:", error);
-    res.status(500).json({ message: "❌ ไม่สามารถจัดคนขับให้รถได้" });
+    console.error("❌ Error fetching drivers:", error);
+    res.status(500).json({ message: "❌ ไม่สามารถดึงข้อมูลได้!" });
   }
 });
 
-// ✅ อัปเดตสถานะรถสไลด์ของคันที่ระบุ (พร้อมใช้งาน/ไม่พร้อมใช้งาน)
-router.patch("/slide-cars/:id/status", authMiddleware, async (req, res) => {
+// ✅ เพิ่มคนขับใหม่
+router.post("/", async (req, res) => {
   try {
-    const { status } = req.body;
-    const car = await SlideCar.findByPk(req.params.id);
-    if (!car) return res.status(404).json({ message: "❌ ไม่พบรถสไลด์!" });
-
-    await car.update({ status });
-    res.json(car);
+    const { username, name, password, phone, status } = req.body;
+    const newDriver = await Driver.create({ username, name, password, phone, status });
+    res.status(201).json({ message: "✅ เพิ่มคนขับสำเร็จ!", newDriver });
   } catch (error) {
-    console.error("❌ Error updating car status:", error);
+    console.error("❌ Error adding driver:", error);
+    res.status(500).json({ message: "❌ เพิ่มคนขับไม่สำเร็จ!" });
+  }
+});
+
+// ✅ ตรวจสอบว่าค่า ID ถูกต้องก่อนค้นหา
+router.get("/:id", authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const driver = await Driver.findByPk(id);
+    if (!driver) {
+      return res.status(404).json({ message: "❌ ไม่พบข้อมูลคนขับ!" });
+    }
+    res.json(driver);
+  } catch (error) {
+    console.error("❌ Error fetching driver:", error);
+    res.status(500).json({ message: "❌ ไม่สามารถดึงข้อมูลได้!" });
+  }
+});
+
+// ✅ อัปเดตข้อมูลคนขับ
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, phone, status } = req.body;
+    const driver = await Driver.findByPk(id);
+    if (!driver) {
+      return res.status(404).json({ message: "❌ ไม่พบข้อมูลคนขับ!" });
+    }
+    driver.name = name;
+    driver.phone = phone;
+    driver.status = status;
+    await driver.save();
+    res.json({ message: "✅ อัปเดตข้อมูลคนขับสำเร็จ!", driver });
+  } catch (error) {
+    console.error("❌ Error updating driver:", error);
+    res.status(500).json({ message: "❌ ไม่สามารถอัปเดตข้อมูลได้!" });
+  }
+});
+
+// ✅ อัปเดตสถานะรถสไลด์ของคันที่ระบุ
+router.put("/update-status/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    const slideCar = await SlideCar.findByPk(id);
+    if (!slideCar) return res.status(404).json({ message: "❌ ไม่พบข้อมูลรถสไลด์!" });
+    slideCar.status = status;
+    await slideCar.save();
+    res.json(slideCar);
+  } catch (error) {
+    console.error("❌ Error updating status:", error);
     res.status(500).json({ message: "❌ ไม่สามารถอัปเดตสถานะได้!" });
   }
 });
