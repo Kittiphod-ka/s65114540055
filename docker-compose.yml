@@ -22,7 +22,7 @@ services:
     depends_on:
       - postgres
     environment:
-      - DATABASE_URL=postgres://postgres:123456@postgres:5432/car
+      - DATABASE_URL=postgres://postgres:123456@202.28.49.122:5432/car
       - NODE_ENV=development
 
   importer:
