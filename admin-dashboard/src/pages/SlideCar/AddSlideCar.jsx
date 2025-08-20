@@ -7,7 +7,7 @@ const AddSlideCar = () => {
     brand: "",
     model: "",
     licensePlate: "",
-    driver: "",
+    driverId: "",
     status: "พร้อมใช้งาน",
   });
 
@@ -73,7 +73,7 @@ const AddSlideCar = () => {
           <label className="block text-gray-700">คนขับ (ไม่ต้องระบุก็ได้)</label>
           <input
             type="text"
-            name="driver"
+            name="driverId"
             value={formData.driver}
             onChange={handleChange}
             className="w-full p-2 border rounded"

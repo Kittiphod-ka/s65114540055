@@ -1,16 +1,12 @@
-const mongoose = require("mongoose");
-
-const UserSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true, trim: true },
-  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-  phone: { type: String, required: true, trim: true },
-  password: { type: String, required: true },
-  profile: { type: String, default: '' }, 
-  role: { type: String, enum: ["user", "admin","driver"], default: "user" },
-}, { timestamps: true }); 
-
-
-UserSchema.set('toJSON', { virtuals: true });
-UserSchema.set('toObject', { virtuals: true });
-
-module.exports = mongoose.model("User", UserSchema);
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define('User', {
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    username: { type: DataTypes.STRING, allowNull: true, unique: true, },
+    email: { type: DataTypes.STRING, allowNull: true, unique: true },
+    phone: { type: DataTypes.STRING, allowNull: true },
+    password: { type: DataTypes.STRING, allowNull: true },
+    profile: { type: DataTypes.STRING },
+    role: { type: DataTypes.ENUM('user', 'admin', 'driver'), defaultValue: 'user' },
+  }, { tableName: 'users', timestamps: true });
+  return User;
+};

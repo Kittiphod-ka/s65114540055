@@ -55,7 +55,7 @@ const DashboardAdmin = () => {
               <tbody>
                 {admins.length > 0 ? (
                   admins.map((admin, index) => (
-                    <tr key={admin._id} className="text-center">
+                    <tr key={admin.id} className="text-center">
                       <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
                       <td className="border border-gray-300 px-4 py-2">{admin.username}</td>
                       <td className="border border-gray-300 px-4 py-2">{admin.email}</td>

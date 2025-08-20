@@ -94,13 +94,13 @@ const Drivers = () => {
               <tbody>
                 {drivers.length > 0 ? (
                   drivers.map((driver, index) => (
-                    <tr key={driver._id} className="hover:bg-gray-100 text-center">
+                    <tr key={driver.id} className="hover:bg-gray-100 text-center">
                       <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
                       <td className="border border-gray-300 px-4 py-2">{driver.username}</td>
                       <td className="border border-gray-300 px-4 py-2">{driver.phone}</td>
                       <td className="border border-gray-300 px-4 py-2">
                         <button
-                          onClick={() => handleStatusToggle(driver._id, driver.status)}
+                          onClick={() => handleStatusToggle(driver.id, driver.status)}
                           className={`px-2 py-1 rounded ${
                             driver.status === "on"
                               ? "bg-green-500 text-white"
@@ -112,13 +112,13 @@ const Drivers = () => {
                       </td>
                       <td className="border border-gray-300 px-4 py-2 flex justify-center space-x-2">
                         <button
-                          onClick={() => navigate(`/drivers/edit/${driver._id}`)}
+                          onClick={() => navigate(`/drivers/edit/${driver.id}`)}
                           className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
                         >
                           แก้ไข
                         </button>
                         <button
-                          onClick={() => handleDelete(driver._id)}
+                          onClick={() => handleDelete(driver.id)}
                           className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                         >
                           ลบ

@@ -86,7 +86,7 @@ const Users = () => {
               <tbody>
                 {filteredUsers.length > 0 ? (
                   filteredUsers.map((user, index) => (
-                    <tr key={user._id} className="hover:bg-gray-100 text-center">
+                    <tr key={user.id} className="hover:bg-gray-100 text-center">
                       <td className="border border-gray-300 px-4 py-2">{index + 1}</td>
                       <td className="border border-gray-300 px-4 py-2">{user.username}</td>
                       <td className="border border-gray-300 px-4 py-2">{user.email}</td>
@@ -94,7 +94,7 @@ const Users = () => {
                       <td className="border border-gray-300 px-4 py-2">{user.role}</td>
                       <td className="border border-gray-300 px-4 py-2">
                         <button
-                          onClick={() => handleDelete(user._id)}
+                          onClick={() => handleDelete(user.id)}
                           className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
                         >
                           🗑 ลบ

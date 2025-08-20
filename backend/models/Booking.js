@@ -1,45 +1,34 @@
-const mongoose = require("mongoose");
+module.exports = (sequelize, DataTypes) => {
+  const Booking = sequelize.define('Booking', {
+    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    userId: { type: DataTypes.INTEGER, allowNull: true },
+    driverId: { type: DataTypes.INTEGER, allowNull: true },
+    name: { type: DataTypes.STRING, allowNull: true },
+    user_phone: { type: DataTypes.STRING, allowNull: true },
+    vehicle_type: { type: DataTypes.STRING, allowNull: true },
+    vehicle_model: { type: DataTypes.STRING },
+    license_plate: { type: DataTypes.STRING },
 
-const bookingSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // ✅ อ้างอิงไปยัง User
-    driver: { type: mongoose.Schema.Types.ObjectId, ref: "Driver" }, // ✅ อ้างอิงไปยัง Driver
-    user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    name: { type: String, required: true },
-    user_phone: { type: String, required: true },
-    vehicle_type: { type: String, required: true },
-    vehicle_model: String,
-    license_plate: String,
-    pickup_location: {
-        latitude: Number,
-        longitude: Number,
-    },
-    dropoff_location: {
-        latitude: Number,
-        longitude: Number,
-    },
-    note: String,
-    distance: Number,
-    price: Number,
-    service_fee: { type: Number, default: 100 },
-    total_price: Number,
-    payment_status: { type: String, default: "pending" },
-    
-    driver_id: { type: String, default: null },
-    driver_location: {
-        latitude: { type: Number, default: null },
-        longitude: { type: Number, default: null },
-    },
+    // location: แทนของเดิม pickup_location.{latitude,longitude}, dropoff_location.{...}
+    pickup_latitude: { type: DataTypes.DOUBLE },
+    pickup_longitude: { type: DataTypes.DOUBLE },
+    dropoff_latitude: { type: DataTypes.DOUBLE },
+    dropoff_longitude: { type: DataTypes.DOUBLE },
+
+    items: { type: DataTypes.JSONB },      // ถ้ามีรายการของ
+    description: { type: DataTypes.TEXT },
+    total_price: { type: DataTypes.FLOAT },
+    payment_status: { type: DataTypes.ENUM('pending', 'paid', 'failed'), defaultValue: 'pending' },
+
     status: {
-        type: String,
-        enum: ["รอคนขับรับงาน", "กำลังดำเนินการ", "เสร็จสิ้น", "ยกเลิก"],
-        default: "รอคนขับรับงาน"
+      type: DataTypes.ENUM('รอคนขับรับงาน', 'กำลังดำเนินการ', 'เสร็จสิ้น', 'ยกเลิก'),
+      defaultValue: 'รอคนขับรับงาน',
     },
-    status2: {  // ✅ **เพิ่ม `status2` เพื่อบอกว่าไปจุดรับ หรือไปจุดส่ง**
-        type: String,
-        enum: ["กำลังไปรับ", "กำลังไปส่ง", "เสร็จสิ้น"],
-        default: "กำลังไปรับ"
+    status2: {
+      type: DataTypes.ENUM('กำลังไปรับ', 'กำลังไปส่ง', 'เสร็จสิ้น'),
+      defaultValue: 'กำลังไปรับ',
     },
-    createdAt: { type: Date, default: Date.now },
-});
+  }, { tableName: 'bookings', timestamps: true });
 
-module.exports = mongoose.model("Booking", bookingSchema);
+  return Booking;
+};
