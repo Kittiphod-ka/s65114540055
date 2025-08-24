@@ -7,7 +7,7 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 19000 19001 19002
+EXPOSE 40055
 
 # ใช้ npx expo start แทนการเรียก expo-cli global
 CMD ["npx", "expo", "start", "--tunnel"]
