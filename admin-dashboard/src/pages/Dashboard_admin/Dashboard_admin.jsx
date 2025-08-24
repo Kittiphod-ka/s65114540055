@@ -18,7 +18,7 @@ const DashboardAdmin = () => {
         return;
       }
 
-      const response = await axios.get("http://localhost:5000/api/admins", {
+      const response = await axios.get("http://localhost:30055/api/admins", {
         headers: { Authorization: `Bearer ${token}` },
       });
 

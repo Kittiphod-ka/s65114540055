@@ -19,7 +19,7 @@ const Users = () => {
         return;
       }
 
-      const response = await axios.get("http://localhost:5000/api/users", {
+      const response = await axios.get("http://localhost:30055/api/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -35,7 +35,7 @@ const Users = () => {
     if (window.confirm("⚠️ คุณแน่ใจหรือไม่ว่าต้องการลบผู้ใช้นี้?")) {
       try {
         const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:5000/api/users/${id}`, {
+        await axios.delete(`http://localhost:30055/api/users/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         fetchUsers(); // โหลดข้อมูลใหม่หลังจากลบ

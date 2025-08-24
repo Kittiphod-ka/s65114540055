@@ -52,7 +52,7 @@ const TrackingDetailScreen = ({ route, navigation }) => {
     try {
       if (bookingData.status !== "กำลังดำเนินการ") return;
 
-      const response = await axios.get(`http://10.0.2.2:5000/api/bookings/driver-location/${bookingData._id}`);
+      const response = await axios.get(`http://10.0.2.2:30055/api/bookings/driver-location/${bookingData._id}`);
 
       if (response.data && response.data.latitude && response.data.longitude) {
         setDriverLocation(response.data);
@@ -63,7 +63,7 @@ const TrackingDetailScreen = ({ route, navigation }) => {
   };
 
   const startTrackingDriver = () => {
-    intervalId.current = setInterval(fetchDriverLocation, 5000);
+    intervalId.current = setInterval(fetchDriverLocation, 30055);
   };
 
   return (

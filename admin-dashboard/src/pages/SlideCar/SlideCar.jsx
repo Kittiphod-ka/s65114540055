@@ -13,7 +13,7 @@ const SlideCar = () => {
 
   const fetchSlideCars = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/slidecars"); // ✅ ตรวจสอบเส้นทาง API
+      const response = await axios.get("http://localhost:30055/api/slidecars"); // ✅ ตรวจสอบเส้นทาง API
       console.log("🚗 Slide Cars from API:", response.data); // ✅ LOG เช็คค่าที่ดึงมา
       setSlideCars(response.data);
       setLoading(false);
@@ -26,7 +26,7 @@ const SlideCar = () => {
   const handleDelete = async (id) => {
     if (window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบรถสไลด์นี้?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/slidecars/${id}`);
+        await axios.delete(`http://localhost:30055/api/slidecars/${id}`);
         fetchSlideCars(); // โหลดข้อมูลใหม่หลังจากลบ
       } catch (error) {
         console.error("❌ Error deleting slide car:", error);
@@ -38,7 +38,7 @@ const SlideCar = () => {
     try {
       console.log(`🛠️ กำลังอัปเดตสถานะของรถ: ${id} → ${newStatus}`);
   
-      const response = await axios.put(`http://localhost:5000/api/slidecars/update-status/${id}`, { status: newStatus });
+      const response = await axios.put(`http://localhost:30055/api/slidecars/update-status/${id}`, { status: newStatus });
   
       if (response.status === 200) {
         setSlideCars(prevCars =>

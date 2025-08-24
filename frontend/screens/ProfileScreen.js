@@ -16,7 +16,7 @@ export default function ProfileScreen() {
         const token = await AsyncStorage.getItem('token');
         console.log('Token:', token); // ตรวจสอบ Token
   
-        const response = await axios.get('http://10.255.67.10:5000/api/profile', {
+        const response = await axios.get('http://10.255.67.10:30055/api/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log('Response:', response.data); // ตรวจสอบ Response ที่ได้จาก Backend
@@ -43,7 +43,7 @@ export default function ProfileScreen() {
       console.log('Token:', token); // ตรวจสอบ Token
   
       const response = await axios.put(
-        'http://10.0.2.2:5000/api/profile',
+        'http://10.0.2.2:30055/api/profile',
         { email, phone, profile },
         { headers: { Authorization: `Bearer ${token}` } }
       );

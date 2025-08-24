@@ -3,16 +3,27 @@ const router = express.Router();
 const { Driver, Booking, SlideCar } = require("../models");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// ✅ ดึงคนขับทั้งหมด (ต้อง login)
-router.get("/", authMiddleware, async (req, res) => {
+// ✅ ดึงรายชื่อคนขับทั้งหมด
+router.get("/all", async (req, res) => {
   try {
     const drivers = await Driver.findAll({ order: [["id", "ASC"]] });
     res.json(drivers);
   } catch (error) {
     console.error("❌ Error fetching drivers:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "❌ ไม่สามารถดึงข้อมูลได้!" });
   }
 });
+
+// // ✅ ดึงคนขับทั้งหมด (ต้อง login)
+// router.get("/", authMiddleware, async (req, res) => {
+//   try {
+//     const drivers = await Driver.findAll({ order: [["id", "ASC"]] });
+//     res.json(drivers);
+//   } catch (error) {
+//     console.error("❌ Error fetching drivers:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
 
 // 📌 ดึง "งานทั้งหมด" ที่รอคนขับรับ
 router.get("/driver/orders", async (req, res) => {
@@ -73,16 +84,7 @@ router.post("/update-status", async (req, res) => {
   }
 });
 
-// ✅ ดึงรายชื่อคนขับทั้งหมด
-router.get("/all", async (req, res) => {
-  try {
-    const drivers = await Driver.findAll({ order: [["id", "ASC"]] });
-    res.json(drivers);
-  } catch (error) {
-    console.error("❌ Error fetching drivers:", error);
-    res.status(500).json({ message: "❌ ไม่สามารถดึงข้อมูลได้!" });
-  }
-});
+
 
 // ✅ เพิ่มคนขับใหม่
 router.post("/", async (req, res) => {
@@ -99,22 +101,21 @@ router.post("/", async (req, res) => {
 // ✅ ตรวจสอบว่าค่า ID ถูกต้องก่อนค้นหา
 router.get("/:id", authMiddleware, async (req, res) => {
   try {
-    const { id } = req.params;
-    const driver = await Driver.findByPk(id);
+    const driver = await Driver.findByPk(req.params.id);
     if (!driver) {
       return res.status(404).json({ message: "❌ ไม่พบข้อมูลคนขับ!" });
     }
     res.json(driver);
-  } catch (error) {
-    console.error("❌ Error fetching driver:", error);
-    res.status(500).json({ message: "❌ ไม่สามารถดึงข้อมูลได้!" });
+  } catch (err) {
+    console.error("❌ Error fetching driver:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
 // ✅ อัปเดตข้อมูลคนขับ
 router.put("/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = Number(req.params.id); // แปลง id เป็น number
     const { name, phone, status } = req.body;
     const driver = await Driver.findByPk(id);
     if (!driver) {

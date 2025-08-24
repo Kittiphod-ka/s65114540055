@@ -65,7 +65,7 @@ const checkDriverAvailability = async () => {
         const headers = { Authorization: `Bearer ${token}` };
 
         // ✅ ตรวจสอบ API ของคนขับที่เปิดรับงาน
-        const driversResponse = await axios.get("http://10.0.2.2:5000/api/drivers/available", { headers });
+        const driversResponse = await axios.get("http://10.0.2.2:30055/api/drivers/available", { headers });
         const availableDrivers = driversResponse.data;
         console.log("✅ คนขับที่เปิดรับงาน:", availableDrivers);
 
@@ -75,7 +75,7 @@ const checkDriverAvailability = async () => {
         }
 
         // ✅ ตรวจสอบ API ของงานที่กำลังดำเนินการ
-        const bookingsResponse = await axios.get("http://10.0.2.2:5000/api/bookings/active", { headers });
+        const bookingsResponse = await axios.get("http://10.0.2.2:30055/api/bookings/active", { headers });
         const activeBookings = bookingsResponse.data;
         console.log("✅ งานที่กำลังดำเนินการ:", activeBookings);
 

@@ -27,7 +27,7 @@ export default function OrderListScreen() {
 
             // ✅ ดึงข้อมูลการจองที่เป็นของ userId
             console.log("📢 กำลังดึงข้อมูลออเดอร์ของ user_id:", storedUserId);
-            const response = await axios.get(`http://10.0.2.2:5000/api/bookings/user/${storedUserId}`);
+            const response = await axios.get(`http://10.0.2.2:30055/api/bookings/user/${storedUserId}`);
 
             console.log("✅ ข้อมูลที่ดึงมา:", response.data);
             setOrders(response.data);

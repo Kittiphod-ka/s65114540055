@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: 123456
       POSTGRES_DB: car
     ports:
-      - "5432:5432"
+      - "20055:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
@@ -18,11 +18,11 @@ services:
     build: ./backend
     container_name: slicercar-backend
     ports:
-      - "5000:5000"
+      - "30055:5000"
     depends_on:
       - postgres
     environment:
-      - DATABASE_URL=postgres://postgres:123456@202.28.49.122:5432/car
+      - DATABASE_URL=postgres://postgres:123456@postgres:5432/car
       - NODE_ENV=development
 
   importer:
@@ -33,7 +33,7 @@ services:
     depends_on:
       - postgres
     environment:
-      - DATABASE_URL=postgres://postgres:123456@202.28.49.122:5432/car
+      - DATABASE_URL=postgres://postgres:123456@postgres:5432/car
     volumes:
       - ./mongo-backup:/app/mongo-backup:ro
       - ./backend:/app/backend:ro
@@ -44,11 +44,11 @@ services:
     build: ./admin-dashboard
     container_name: slicercar-admin
     ports:
-      - "3000:3000"
+      - "10055:10055"
     depends_on:
       - backend
     environment:
-      - REACT_APP_API_URL=http://backend:5000
+      - REACT_APP_API_URL=http://localhost:30055
 
   frontend:
     build:

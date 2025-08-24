@@ -13,7 +13,7 @@ export default function DriverOrderSummaryScreen({ route }) {
 
   const fetchImages = async () => {
     try {
-      const response = await axios.get(`http://10.0.2.2:5000/api/booking-images/${bookingData._id}`);
+      const response = await axios.get(`http://10.0.2.2:30055/api/booking-images/${bookingData._id}`);
       console.log("📸 รูปที่ดึงมา:", response.data); // ✅ เช็คข้อมูลที่ดึงมา
       setImages(response.data);
     } catch (error) {
@@ -44,7 +44,7 @@ export default function DriverOrderSummaryScreen({ route }) {
       });
 
       try {
-        const response = await axios.post("http://10.0.2.2:5000/api/booking-images/upload", formData, {
+        const response = await axios.post("http://10.0.2.2:30055/api/booking-images/upload", formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
@@ -77,7 +77,7 @@ export default function DriverOrderSummaryScreen({ route }) {
           images.map((img, index) => (
             <Image
               key={index}
-              source={{ uri: `http://10.0.2.2:5000/uploads/${img.imageUrl.replace("/uploads/", "")}` }}
+              source={{ uri: `http://10.0.2.2:30055/uploads/${img.imageUrl.replace("/uploads/", "")}` }}
               style={styles.image}
             />
           ))

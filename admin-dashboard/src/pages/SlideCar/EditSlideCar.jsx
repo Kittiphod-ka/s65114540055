@@ -18,7 +18,7 @@ const EditSlideCar = () => {
   const fetchSlideCar = async () => {
     try {
       console.log("🚗 กำลังดึงข้อมูลรถสไลด์:", id);
-      const response = await axios.get(`http://localhost:5000/api/slidecars/${id}`);
+      const response = await axios.get(`http://localhost:30055/api/slidecars/${id}`);
       console.log("✅ ได้รับข้อมูลรถสไลด์:", response.data);
       setSlideCar(response.data);
       setLoading(false);
@@ -32,7 +32,7 @@ const EditSlideCar = () => {
   const fetchDrivers = async () => {
     try {
       console.log("🔍 กำลังดึงรายชื่อคนขับ...");
-      const response = await axios.get("http://localhost:5000/api/drivers");
+      const response = await axios.get("http://localhost:30055/api/drivers");
       console.log("✅ ได้รับรายชื่อคนขับ:", response.data);
       setDrivers(response.data);
     } catch (error) {
@@ -43,7 +43,7 @@ const EditSlideCar = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/slidecars/${id}`, slideCar);
+      await axios.put(`http://localhost:30055/api/slidecars/${id}`, slideCar);
       alert("✅ อัปเดตรถสไลด์สำเร็จ!");
       navigate("/slidecar");
     } catch (error) {

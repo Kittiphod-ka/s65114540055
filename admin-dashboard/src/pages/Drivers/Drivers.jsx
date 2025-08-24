@@ -20,7 +20,7 @@ const Drivers = () => {
         return;
       }
   
-      const response = await axios.get("http://localhost:5000/api/drivers", {
+      const response = await axios.get("http://localhost:30055/api/drivers", {
         headers: { Authorization: `Bearer ${token}` },
       });
   
@@ -37,7 +37,7 @@ const Drivers = () => {
     if (window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบคนขับนี้?")) {
       try {
         const token = localStorage.getItem("token");
-        await axios.delete(`http://localhost:5000/api/drivers/${id}`, {
+        await axios.delete(`http://localhost:30055/api/drivers/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         fetchDrivers(); // โหลดข้อมูลใหม่
@@ -52,7 +52,7 @@ const Drivers = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5000/api/drivers/update-status/${id}`,
+        `http://localhost:30055/api/drivers/update-status/${id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
