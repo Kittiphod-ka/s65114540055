@@ -16,7 +16,7 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d car"]
       interval: 10s
-      timeout: 5s
+      timeout: 10s
       retries: 5
 
   backend:
