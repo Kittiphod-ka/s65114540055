@@ -66,6 +66,10 @@ const Login = ({ setIsAuthenticated }) => {
         <h1 className="text-lg font-bold">Username: test21</h1>
         <h1 className="text-lg font-bold">Password: nnn112233</h1>
       </div>
+
+      <div className="mt-4 p-3 border-2 border-dashed relative z-50 not-sr-only">
+        <h1 className="text-lg font-bold">กรณี Login ไม่ได้ แก้ ip ใน .env</h1>
+      </div>
     </div>
   </div>
 );
