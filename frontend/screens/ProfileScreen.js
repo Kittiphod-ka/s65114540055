@@ -43,7 +43,7 @@ export default function ProfileScreen() {
       console.log('Token:', token); // ตรวจสอบ Token
   
       const response = await axios.put(
-        'http://10.0.2.2:30055/api/profile',
+        'http://10.0.2.2:40055/api/profile',
         { email, phone, profile },
         { headers: { Authorization: `Bearer ${token}` } }
       );

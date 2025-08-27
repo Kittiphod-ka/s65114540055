@@ -20,7 +20,7 @@ const AddSlideCar = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:30055/api/slidecars", formData);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/slidecars`, formData);
       alert("🚗 เพิ่มรถสไลด์สำเร็จ!");
       navigate("/slidecar"); // กลับไปหน้ารายการรถสไลด์
     } catch (error) {

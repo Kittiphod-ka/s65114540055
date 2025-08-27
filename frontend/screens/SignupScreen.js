@@ -25,7 +25,7 @@ export default function SignupScreen({ navigation }) {
     }
 
     try {
-      const res = await axios.post('http://10.0.2.2:30055/api/auth/signup', {
+      const res = await axios.post('http://10.0.2.2:40055/api/auth/signup', {
         username,
         email,
         phone,

@@ -18,7 +18,7 @@ const DashboardAdmin = () => {
         return;
       }
 
-      const response = await axios.get("http://localhost:30055/api/admins", {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/admins`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

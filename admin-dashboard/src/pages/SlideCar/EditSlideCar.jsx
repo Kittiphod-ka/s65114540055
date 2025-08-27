@@ -18,7 +18,7 @@ const EditSlideCar = () => {
   const fetchSlideCar = async () => {
     try {
       console.log("🚗 กำลังดึงข้อมูลรถสไลด์:", id);
-      const response = await axios.get(`http://localhost:30055/api/slidecars/${id}`);
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/slidecars/${id}`);
       console.log("✅ ได้รับข้อมูลรถสไลด์:", response.data);
       setSlideCar(response.data);
       setLoading(false);
@@ -32,7 +32,7 @@ const EditSlideCar = () => {
   const fetchDrivers = async () => {
     try {
       console.log("🔍 กำลังดึงรายชื่อคนขับ...");
-      const response = await axios.get("http://localhost:30055/api/drivers");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/drivers`);
       console.log("✅ ได้รับรายชื่อคนขับ:", response.data);
       setDrivers(response.data);
     } catch (error) {
@@ -43,7 +43,7 @@ const EditSlideCar = () => {
   const handleDelete = async (id) => {
     if (window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบรถสไลด์นี้?")) {
       try {
-        await axios.delete(`http://localhost:30055/api/slidecars/${id}`);
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/slidecars/${id}`);
         fetchSlideCars();
       } catch (error) {
         console.error("❌ Error deleting slide car:", error);

@@ -34,7 +34,7 @@ export default function DriverOrderDetailScreen({ route, navigation }) {
   // ✅ โหลดสถานะล่าสุดจาก Database
   const fetchBookingStatus = async () => {
     try {
-      const response = await axios.get(`http://10.0.2.2:30055/api/bookings/get-status2/${bookingData._id}`);
+      const response = await axios.get(`http://10.0.2.2:40055/api/bookings/get-status2/${bookingData._id}`);
       
       if (response.data && response.data.status2) {
         console.log("🔄 โหลดสถานะล่าสุด:", response.data.status2);
@@ -63,7 +63,7 @@ export default function DriverOrderDetailScreen({ route, navigation }) {
       const { latitude, longitude } = location.coords;
       setDriverLocation({ latitude, longitude });
 
-      await axios.post("http://10.0.2.2:30055/api/bookings/update-driver-location", {
+      await axios.post("http://10.0.2.2:40055/api/bookings/update-driver-location", {
         bookingId: bookingData._id, 
         latitude,
         longitude,
@@ -103,7 +103,7 @@ export default function DriverOrderDetailScreen({ route, navigation }) {
     }
 
     try {
-        const response = await axios.post("http://10.0.2.2:30055/api/bookings/update-status", {
+        const response = await axios.post("http://10.0.2.2:40055/api/bookings/update-status", {
             _id: bookingData._id,
             status: "กำลังดำเนินการ",
             driver_id: driverId,
@@ -131,7 +131,7 @@ const handleCancelOrder = async () => {
   }
 
   try {
-      const response = await axios.post("http://10.0.2.2:30055/api/bookings/cancel-order", {
+      const response = await axios.post("http://10.0.2.2:40055/api/bookings/cancel-order", {
           _id: bookingData._id,
           status: "ยกเลิก",
           driver_id: driverId,
@@ -161,7 +161,7 @@ const handleCancelOrder = async () => {
         Alert.alert("📌 คุณถึงจุดรับแล้ว!", "กำลังเดินทางไปยังจุดส่ง...");
         setStatus2("กำลังไปส่ง");
 
-        await axios.post(`http://10.0.2.2:30055/api/bookings/update-status2`, {
+        await axios.post(`http://10.0.2.2:40055/api/bookings/update-status2`, {
           _id: bookingData._id,
           status2: "กำลังไปส่ง",
         });
@@ -171,7 +171,7 @@ const handleCancelOrder = async () => {
         notifiedDropoff.current = true;
         Alert.alert("✅ งานเสร็จสิ้น!", "คุณถึงจุดส่งแล้ว");
 
-        await axios.post(`http://10.0.2.2:30055/api/bookings/update-status2`, {
+        await axios.post(`http://10.0.2.2:40055/api/bookings/update-status2`, {
           _id: bookingData._id,
           status2: "เสร็จสิ้น",
         });
@@ -221,7 +221,7 @@ const handleCancelOrder = async () => {
   // };
 
   const handleCompleteOrder = async () => {
-    await axios.post(`http://10.0.2.2:30055/api/bookings/update-status/:id`, {
+    await axios.post(`http://10.0.2.2:40055/api/bookings/update-status/:id`, {
       _id: bookingData._id,
       status: "เสร็จสิ้น",
       driver_id: driverId,

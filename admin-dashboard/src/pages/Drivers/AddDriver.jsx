@@ -24,7 +24,7 @@ const handleSubmit = async (e) => {
     const token = localStorage.getItem("token");
     console.log("🚩 Token ที่จะส่ง:", token);
     await axios.post(
-      "http://localhost:30055/api/drivers",
+      `${import.meta.env.VITE_API_URL}/api/drivers`,
       driver,
       {
         headers: {

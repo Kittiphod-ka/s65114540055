@@ -9,7 +9,7 @@ export default function BookingSuccessScreen({ navigation, route }) {
     const savePaymentStatus = async () => {
       try {
         console.log("📢 บันทึกการชำระเงินสำหรับ Booking ID:", bookingId);
-        const response = await axios.post("http://10.0.2.2:30055/api/bookings/update-payment", {
+        const response = await axios.post("http://10.0.2.2:40055/api/bookings/update-payment", {
           bookingId,
           status: "paid",
         });
