@@ -20,7 +20,7 @@ const Drivers = () => {
         return;
       }
   
-      const response = await axios.get("http://localhost:30055/api/drivers", {
+      const response = await axios.get("http://localhost:30055/api/drivers/all", {
         headers: { Authorization: `Bearer ${token}` },
       });
   

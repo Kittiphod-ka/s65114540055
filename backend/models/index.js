@@ -8,8 +8,8 @@ const Booking = require('./Booking')(sequelize, DataTypes);
 const BookingImage = require('./BookingImage')(sequelize, DataTypes);
 
 // Relations
-Driver.hasMany(SlideCar, { foreignKey: 'driverId' });
-SlideCar.belongsTo(Driver, { foreignKey: 'driverId' });
+Driver.hasMany(SlideCar, { foreignKey: 'driverId', as: 'cars' });
+SlideCar.belongsTo(Driver, { foreignKey: 'driverId', as: 'driver' });
 
 User.hasMany(Booking, { foreignKey: 'userId' });
 Booking.belongsTo(User, { foreignKey: 'userId' });

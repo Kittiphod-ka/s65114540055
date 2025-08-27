@@ -74,7 +74,7 @@ const AddSlideCar = () => {
           <input
             type="text"
             name="driverId"
-            value={formData.driver}
+            value={formData.driverId}
             onChange={handleChange}
             className="w-full p-2 border rounded"
           />

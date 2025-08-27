@@ -40,17 +40,17 @@ const EditSlideCar = () => {
     }
   };
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.put(`http://localhost:30055/api/slidecars/${id}`, slideCar);
-      alert("✅ อัปเดตรถสไลด์สำเร็จ!");
-      navigate("/slidecar");
-    } catch (error) {
-      console.error("❌ Error updating slide car:", error);
-      alert("❌ ไม่สามารถอัปเดตรถสไลด์ได้!");
+  const handleDelete = async (id) => {
+    if (window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบรถสไลด์นี้?")) {
+      try {
+        await axios.delete(`http://localhost:5000/api/slidecars/${id}`);
+        fetchSlideCars();
+      } catch (error) {
+        console.error("❌ Error deleting slide car:", error);
+      }
     }
   };
+  
 
   if (loading) return <p>⏳ กำลังโหลดข้อมูล...</p>;
   if (error) return <p>{error}</p>;
