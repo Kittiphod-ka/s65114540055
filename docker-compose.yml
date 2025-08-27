@@ -1,35 +1,57 @@
-version: "3.8"
-
 services:
   postgres:
     image: postgres:17
     container_name: slicercar-postgres
     restart: always
-    environment:
-      POSTGRES_USER: postgrescar
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_DB: car
+    env_file:
+      - .env
     ports:
-      - "20055:5432"
+      - "${POSTGRES_PORT}:${PG_PORT}"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d car"]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h localhost"]
       interval: 10s
-      timeout: 10s
+      timeout: 5s
       retries: 5
 
   backend:
     build: ./backend
     container_name: slicercar-backend
+    env_file:
+      - .env
     ports:
-      - "30055:5000"
+      - "${BACKEND_PORT}:${PORT}"
     depends_on:
       postgres:
         condition: service_healthy
-    environment:
-      - DATABASE_URL=postgres://postgrescar:123456@postgres:5432/car
-      - NODE_ENV=development
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build: ./frontend
+    container_name: slicercar-frontend
+    env_file:
+      - .env
+    ports:
+      - "${FRONT_END}:${FRONT_END}"
+    volumes:
+      - ./frontend:/app
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+  admin:
+    build: ./admin-dashboard
+    container_name: slicercar-admin
+    env_file:
+      - /.env
+    ports:
+      - "${ADMIN_PORT}:${ADMIN_PORT}"
 
   importer:
     build:
@@ -39,36 +61,13 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    environment:
-      - DATABASE_URL=postgres://postgrescar:123456@postgres:5432/car
+    env_file:
+      - .env
     volumes:
       - ./mongo-backup:/app/mongo-backup:ro
       - ./backend:/app/backend:ro
       - ./docker/mongo_to_postgres_import.js:/app/mongo_to_postgres_import.js:ro
     command: ["node", "mongo_to_postgres_import.js", "--dir", "./mongo-backup", "--sync"]
-
-  admin:
-    build: ./admin-dashboard
-    container_name: slicercar-admin
-    ports:
-      - "10055:10055"
-    depends_on:
-      - backend
-    environment:
-      - REACT_APP_API_URL=http://localhost:30055
-
-  frontend:
-    build:
-      context: ./frontend
-    container_name: slicercar-frontend
-    ports:
-      - "40055:40055"
-    volumes:
-      - ./frontend:/app
-    stdin_open: true
-    tty: true
-    depends_on:
-      - backend
 
 volumes:
   postgres-data:

@@ -26,7 +26,7 @@ const SlideCar = () => {
   const handleDelete = async (id) => {
     if (window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบรถสไลด์นี้?")) {
       try {
-        await axios.delete(`http://localhost:30055/api/slidecars/${id}`);
+        await axios.delete(`http://localhost:30055/api/slidecars/${id}`)
         fetchSlideCars(); // โหลดข้อมูลใหม่หลังจากลบ
       } catch (error) {
         console.error("❌ Error deleting slide car:", error);

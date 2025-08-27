@@ -33,7 +33,7 @@ app.use("/api/orders", ordersRoutes);
 app.use("/api/booking-images", bookingImageRoutes);
 app.use("/api/payments", paymentRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 30055;
 
 (async () => {
   await connectDB();

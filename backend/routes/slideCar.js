@@ -31,17 +31,16 @@ router.put('/:id', async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-  const car = await SlideCar.findByPk(req.params.id);
-  if (!car) return res.status(404).json({ message: 'ไม่พบรถ' });
-  await car.destroy();
-  res.json({ ok: true });
-});
+  try {
+    const car = await SlideCar.findByPk(req.params.id);
+    if (!car) return res.status(404).json({ message: 'ไม่พบรถ' });
 
-router.delete('/:id', async (req, res) => {
-  const car = await SlideCar.findByPk(req.params.id);
-  if (!car) return res.status(404).json({ message: 'ไม่พบรถ' });
-  await car.destroy();
-  res.json({ ok: true });
+    await car.destroy();
+    res.json({ message: '✅ ลบรถเรียบร้อยแล้ว' });
+  } catch (error) {
+    console.error('❌ Error deleting car:', error);
+    res.status(500).json({ message: '❌ ไม่สามารถลบรถได้', error: error.message });
+  }
 });
 
 module.exports = router;

@@ -20,4 +20,7 @@ Booking.belongsTo(Driver, { foreignKey: 'driverId' });
 Booking.hasMany(BookingImage, { foreignKey: 'bookingId' });
 BookingImage.belongsTo(Booking, { foreignKey: 'bookingId' });
 
+Booking.belongsTo(SlideCar, { foreignKey: 'carId', onDelete: 'CASCADE' });
+SlideCar.hasMany(Booking, { foreignKey: 'carId' });
+
 module.exports = { sequelize, User, Driver, SlideCar, Booking, BookingImage };
