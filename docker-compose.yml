@@ -49,7 +49,7 @@ services:
     build: ./admin-dashboard
     container_name: slicercar-admin
     env_file:
-      - /.env
+      - .env
     ports:
       - "${ADMIN_PORT}:${ADMIN_PORT}"
 
