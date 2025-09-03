@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_API_URL}/api"; // 🔗 แก้เป็น URL ของ backend จริงๆ
+const API_URL = `${import.meta.env.VITE_API_URL}/api`; // 🔗 แก้เป็น URL ของ backend จริงๆ
 
 export const fetchBookings = async () => {
   try {
