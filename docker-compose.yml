@@ -1,11 +1,11 @@
+version: "3.9"
+
 services:
   postgres:
     image: postgres:17
     restart: always
     env_file:
       - .env
-    ports:
-      - "${POSTGRES_PORT}:${PG_PORT}"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
@@ -13,45 +13,53 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - traefik-public
 
   backend:
     build: ./backend
     env_file:
       - .env
-    ports:
-      - "${BACKEND_PORT}:${PORT}"
     depends_on:
       postgres:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
-      - slicer-net1
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=web"
+      - "traefik.http.services.backend.loadbalancer.server.port=${BACKEND_PORT}"
+
+  admin:
+    build: ./admin-dashboard
+    env_file:
+      - .env
+    networks:
+      - traefik-public
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.admin.rule=PathPrefix(`/admin`)"
+        - "traefik.http.routers.admin.entrypoints=web"
 
   frontend:
     build: ./frontend
     env_file:
       - .env
-    ports:
-      - "${FRONT_END}:${FRONT_END}"
     volumes:
       - ./frontend:/app
     stdin_open: true
     tty: true
     depends_on:
       - backend
-
-  admin:
-    build: ./admin-dashboard
-    env_file:
-      - .env
-    ports:
-      - "${ADMIN_PORT}"
     networks:
-      - slicer-net1
+      - traefik-public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/frontend`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.services.frontend.loadbalancer.server.port=${FRONT_END}"
+
 
   importer:
     build:
@@ -66,27 +74,31 @@ services:
       - ./mongo-backup:/app/mongo-backup:ro
       - ./backend:/app/backend:ro
       - ./docker/mongo_to_postgres_import.js:/app/mongo_to_postgres_import.js:ro
+      - static_share:/static_share
     command: ["node", "mongo_to_postgres_import.js", "--dir", "./mongo-backup", "--sync"]
-
-  nginx:
-    image: nginx:stable-alpine
-    container_name: s65114540055-nginx
-    depends_on:
-      - backend
-      - admin
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./admin-dashboard/src/index.html:/usr/share/nginx/html/index.html:ro
-    restart: unless-stopped
     networks:
-      - slicer-net1
-    
-  
+      - traefik-public
+
+  # traefik:
+  #   image: traefik:v2.11
+  #   container_name: traefik
+  #   command:
+  #     - "--api.insecure=true"
+  #     - "--providers.docker=true"
+  #     - "--providers.docker.exposedbydefault=false"
+  #     - "--entrypoints.web.address=:8001"
+  #   ports:
+  #     - "8001:8001"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     - static_share:/static_share
+  #   networks:
+  #     - traefik-public
+
 volumes:
   postgres-data:
+  static_share:
 
 networks:
-  slicer-net1:
+  traefik-public:
     external: true
