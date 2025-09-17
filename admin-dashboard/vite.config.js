@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/admin/',
+  base: '/65114540055',
   plugins: [react()],
   css: {
     postcss: './postcss.config.js', // เพิ่มบรรทัดนี้
