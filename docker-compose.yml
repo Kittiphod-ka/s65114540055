@@ -41,7 +41,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.admin.rule=PathPrefix(`/s65114540055`) || Path(`/s65114540055`)"
       - "traefik.http.routers.admin.entrypoints=web"
-      - "traefik.http.services.admin.loadbalancer.server.port=10055"
+      - "traefik.http.services.admin.loadbalancer.server.port=${ADMIN_PORT}"
 
   frontend:
     build: ./frontend
