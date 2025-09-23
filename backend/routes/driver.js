@@ -14,16 +14,16 @@ router.get("/all", async (req, res) => {
   }
 });
 
-// // ✅ ดึงคนขับทั้งหมด (ต้อง login)
-// router.get("/", authMiddleware, async (req, res) => {
-//   try {
-//     const drivers = await Driver.findAll({ order: [["id", "ASC"]] });
-//     res.json(drivers);
-//   } catch (error) {
-//     console.error("❌ Error fetching drivers:", error);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// });
+// ✅ ดึงคนขับทั้งหมด 
+router.get("/", async (req, res) => {
+  try {
+    const drivers = await Driver.findAll({ order: [["id", "ASC"]] });
+    res.json(drivers);
+  } catch (error) {
+    console.error("❌ Error fetching drivers:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 // 📌 ดึง "งานทั้งหมด" ที่รอคนขับรับ
 router.get("/driver/orders", async (req, res) => {
@@ -84,8 +84,6 @@ router.post("/update-status", async (req, res) => {
   }
 });
 
-
-
 // ✅ เพิ่มคนขับใหม่
 router.post("/", async (req, res) => {
   try {
@@ -145,6 +143,27 @@ router.put("/update-status/:id", async (req, res) => {
   } catch (error) {
     console.error("❌ Error updating status:", error);
     res.status(500).json({ message: "❌ ไม่สามารถอัปเดตสถานะได้!" });
+  }
+});
+
+// 🗑️ ลบคนขับ
+router.delete('/:id', authMiddleware, async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ message: '❌ ID ไม่ถูกต้อง!' });
+    }
+
+    const driver = await Driver.findByPk(id);
+    if (!driver) {
+      return res.status(404).json({ message: '❌ ไม่พบข้อมูลคนขับ!' });
+    }
+
+    await driver.destroy();
+    res.json({ message: '✅ ลบคนขับสำเร็จ!' });
+  } catch (error) {
+    console.error('❌ Error deleting driver:', error);
+    res.status(500).json({ message: '❌ เกิดข้อผิดพลาดในการลบคนขับ!' });
   }
 });
 

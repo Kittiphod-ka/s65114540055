@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -11,7 +11,20 @@ const AddSlideCar = () => {
     status: "พร้อมใช้งาน",
   });
 
+  const [drivers, setDrivers] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchDrivers = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/drivers`);
+        setDrivers(res.data);
+      } catch (err) {
+        console.error("❌ Error fetching drivers:", err);
+      }
+    };
+    fetchDrivers();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,10 +32,16 @@ const AddSlideCar = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.brand || !formData.model || !formData.licensePlate) {
+      alert("❌ กรุณากรอกข้อมูลให้ครบถ้วน!");
+      return;
+    }
+
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/slidecars`, formData);
       alert("🚗 เพิ่มรถสไลด์สำเร็จ!");
-      navigate("/slidecar"); // กลับไปหน้ารายการรถสไลด์
+      navigate("/slidecar");
     } catch (error) {
       console.error("❌ Error adding slide car:", error);
       alert("❌ เพิ่มรถสไลด์ไม่สำเร็จ!");
@@ -71,13 +90,19 @@ const AddSlideCar = () => {
 
         <div className="mb-4">
           <label className="block text-gray-700">คนขับ (ไม่ต้องระบุก็ได้)</label>
-          <input
-            type="text"
+          <select
             name="driverId"
             value={formData.driverId}
             onChange={handleChange}
             className="w-full p-2 border rounded"
-          />
+          >
+            <option value="">ไม่มีคนขับ</option>
+            {drivers.map(driver => (
+              <option key={driver.id} value={driver.id}>
+                {driver.username}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="mb-4">

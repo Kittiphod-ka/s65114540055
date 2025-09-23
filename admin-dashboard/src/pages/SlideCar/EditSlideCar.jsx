@@ -3,24 +3,25 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const EditSlideCar = () => {
-  const { id } = useParams(); // ✅ ดึงค่า ID ของรถจาก URL
+  const { id } = useParams();
   const navigate = useNavigate();
   const [slideCar, setSlideCar] = useState(null);
-  const [drivers, setDrivers] = useState([]); // ✅ รายชื่อคนขับ
+  const [drivers, setDrivers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchSlideCar();
-    fetchDrivers(); // ✅ โหลดรายชื่อคนขับทั้งหมด
+    fetchDrivers();
   }, []);
 
   const fetchSlideCar = async () => {
     try {
-      console.log("🚗 กำลังดึงข้อมูลรถสไลด์:", id);
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/slidecars/${id}`);
-      console.log("✅ ได้รับข้อมูลรถสไลด์:", response.data);
-      setSlideCar(response.data);
+      setSlideCar({
+        ...response.data,
+        driverId: response.data.driverId || null   // ✅ ให้ driverId เริ่มต้นเป็น null แทน ''
+      });
       setLoading(false);
     } catch (error) {
       console.error("❌ Error fetching slide car:", error);
@@ -31,29 +32,32 @@ const EditSlideCar = () => {
 
   const fetchDrivers = async () => {
     try {
-      console.log("🔍 กำลังดึงรายชื่อคนขับ...");
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/drivers`);
-      console.log("✅ ได้รับรายชื่อคนขับ:", response.data);
       setDrivers(response.data);
     } catch (error) {
       console.error("❌ Error fetching drivers:", error);
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบรถสไลด์นี้?")) {
-      try {
-        await axios.delete(`${import.meta.env.VITE_API_URL}/api/slidecars/${id}`);
-        fetchSlideCars();
-      } catch (error) {
-        console.error("❌ Error deleting slide car:", error);
-      }
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/api/slidecars/${id}`,
+        slideCar
+      );
+      alert("✅ อัปเดตข้อมูลรถสไลด์สำเร็จ!");
+      // ✅ path ต้องตรงกับ App.jsx (ไม่มี s)
+      navigate("/slidecar");
+    } catch (error) {
+      console.error("❌ Error updating slide car:", error);
+      alert("❌ ไม่สามารถอัปเดตข้อมูลได้!");
     }
   };
-  
 
   if (loading) return <p>⏳ กำลังโหลดข้อมูล...</p>;
   if (error) return <p>{error}</p>;
+  if (!slideCar) return <p>❌ ไม่พบข้อมูลรถสไลด์!</p>;
 
   return (
     <div className="p-6">
@@ -100,14 +104,19 @@ const EditSlideCar = () => {
         <div className="mb-2">
           <label className="block font-semibold">คนขับ:</label>
           <select
-            value={slideCar.driver || ""}
-            onChange={(e) => setSlideCar({ ...slideCar, driver: e.target.value })}
+            value={slideCar.driverId ?? ""}   // ✅ ถ้า null ให้แสดงเป็น ""
+            onChange={(e) =>
+              setSlideCar({
+                ...slideCar,
+                driverId: e.target.value === "" ? null : parseInt(e.target.value)
+              })
+            }
             className="border p-2 w-full"
           >
             <option value="">ไม่มีคนขับ</option>
             {drivers.map((driver) => (
               <option key={driver.id} value={driver.id}>
-                {driver.username} - {driver.phone}
+                {driver.username}
               </option>
             ))}
           </select>

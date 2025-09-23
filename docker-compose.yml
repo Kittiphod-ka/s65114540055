@@ -38,9 +38,10 @@ services:
     networks:
       - traefik-public
     labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.admin.rule=PathPrefix(`/admin`)"
-        - "traefik.http.routers.admin.entrypoints=web"
+      - "traefik.enable=true"
+      - "traefik.http.routers.admin.rule=PathPrefix(`/s65114540055`) || Path(`/s65114540055`)"
+      - "traefik.http.routers.admin.entrypoints=web"
+      - "traefik.http.services.admin.loadbalancer.server.port=10055"
 
   frontend:
     build: ./frontend
@@ -79,21 +80,21 @@ services:
     networks:
       - traefik-public
 
-  # traefik:
-  #   image: traefik:v2.11
-  #   container_name: traefik
-  #   command:
-  #     - "--api.insecure=true"
-  #     - "--providers.docker=true"
-  #     - "--providers.docker.exposedbydefault=false"
-  #     - "--entrypoints.web.address=:8001"
-  #   ports:
-  #     - "8001:8001"
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock:ro
-  #     - static_share:/static_share
-  #   networks:
-  #     - traefik-public
+  traefik:
+    image: traefik:v2.11
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:8001"
+    ports:
+      - "8001:8001"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - static_share:/static_share
+    networks:
+      - traefik-public
 
 volumes:
   postgres-data:

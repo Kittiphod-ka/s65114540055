@@ -37,12 +37,35 @@ const Drivers = () => {
     if (window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบคนขับนี้?")) {
       try {
         const token = localStorage.getItem("token");
-        await axios.delete(`${import.meta.env.VITE_API_URL}/api/drivers/${id}`, {
+        if (!token) {
+          alert("❌ ไม่มี Token! กรุณาล็อกอินใหม่");
+          return;
+        }
+
+        const response = await axios.delete(`${import.meta.env.VITE_API_URL}/api/drivers/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        fetchDrivers(); // โหลดข้อมูลใหม่
+
+        if (response.status === 200) {
+          alert("✅ ลบคนขับสำเร็จ!");
+          fetchDrivers(); // โหลดข้อมูลใหม่
+        } else {
+          alert("❌ ไม่สามารถลบคนขับได้: " + response.data.message);
+        }
       } catch (error) {
         console.error("❌ Error deleting driver:", error);
+        if (error.response) {
+          const status = error.response.status;
+          if (status === 404) {
+            alert("❌ ไม่พบข้อมูลคนขับที่ต้องการลบ!");
+          } else if (status === 500) {
+            alert("❌ เกิดข้อผิดพลาดในเซิร์ฟเวอร์!");
+          } else {
+            alert("❌ เกิดข้อผิดพลาด: " + error.response.data.message);
+          }
+        } else {
+          alert("❌ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้!");
+        }
       }
     }
   };

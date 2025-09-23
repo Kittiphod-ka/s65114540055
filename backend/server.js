@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/bookings', bookingRoutes);
-app.use('/api/slide-cars', slideCarRoutes);
+app.use('/api/slidecars', slideCarRoutes);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use("/api/admins", adminRoutes);
 app.use("/api/drivers", driverRoutes);
